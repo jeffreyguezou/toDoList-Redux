@@ -14,7 +14,7 @@ const ToDoItem = (props) => {
     }
   };
   return (
-    <li key={item.id}>
+    <li key={item.id} className="card">
       <textarea
         ref={inputRef}
         disabled={inputRef}
@@ -23,9 +23,12 @@ const ToDoItem = (props) => {
           update(item.id, inputRef.current.value, event);
         }}
       ></textarea>
-      <button onClick={changeFocus}>Edit</button>
-      <button onClick={completeToDo}>Complete</button>
-      <button onClick={() => removeToDo(item.id)}>Delete</button>
+      <div className="btns">
+        <button onClick={changeFocus}>Edit</button>
+        <button onClick={completeToDo}>Complete</button>
+        <button onClick={() => removeToDo(item.id)}>Delete</button>
+      </div>
+      {item.completed && <span className="completed">Done</span>}
     </li>
   );
 };
