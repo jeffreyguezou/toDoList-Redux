@@ -1,11 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import {
-  addTodos,
-  removeToDos,
-  updateToDos,
-  completeToDos,
-} from "../redux/reducer";
+import { addTodos } from "../redux/reducer";
+import { GoPlus } from "react-icons/go";
+import { motion } from "framer-motion";
+
 const mapStateToProps = (state) => {
   return {
     todos: state,
@@ -14,36 +12,50 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToDo: (obj) => dispatch(addTodos(obj)),
-    removeToDo: (id) => dispatch(removeToDos(id)),
-    updateToDo: (obj) => dispatch(updateToDos(obj)),
-    completeToDo: (id) => dispatch(completeToDos(id)),
+    addTodo: (obj) => dispatch(addTodos(obj)),
   };
 };
 
 const Todos = (props) => {
   const [todo, setTodo] = useState("");
-  const handleChange = (event) => {
-    setTodo(event.target.value);
+
+  const handleChange = (e) => {
+    setTodo(e.target.value);
   };
 
+  const add = () => {
+    if (todo === "") {
+      alert("Input is Empty");
+    } else {
+      props.addTodo({
+        id: Math.floor(Math.random() * 1000),
+        item: todo,
+        completed: false,
+      });
+      setTodo("");
+    }
+  };
+  //console.log("props from store", props);
   return (
     <div className="addTodos">
-      TODOS
-      <input type="text" onChange={handleChange} className="todo-input" />
-      <button
+      <input
+        type="text"
+        onChange={(e) => handleChange(e)}
+        className="todo-input"
+        value={todo}
+      />
+
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
         className="add-btn"
-        onClick={() =>
-          props.addToDo({
-            id: Math.floor(Math.random() * 1000),
-            item: todo,
-            completed: false,
-          })
-        }
+        onClick={() => add()}
       >
-        Add
-      </button>
+        <GoPlus />
+      </motion.button>
+      <br />
     </div>
   );
 };
+//we can use connect method to connect this component with redux store
 export default connect(mapStateToProps, mapDispatchToProps)(Todos);
